@@ -1,22 +1,11 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
-import { Route } from 'react-router-dom'
-import Home from './pages/home/Home'
-import Signup from './pages/authentication/Signup'
-import Login from './pages/authentication/Login'
-
+import './App.css';
 
 function App() {
-  const [count, setCount] = useState(0)
-
   return (
     <>
-      <button class="btn btn-primary">Button</button>
-
+      <h1 className="text-2xl font-bold text-center">Welcome to Gup-Shup</h1>
     </>
-  )
+  );
 }
 
-export default App
+export default App;
