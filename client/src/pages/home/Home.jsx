@@ -5,7 +5,7 @@ import MessageContainer from './MessageContainer';
 const Home = () => {
   return (
     <>
-      <div className="flex max-w-full h-[calc(100vh-theme(height.16)-theme(height.2))]">
+      <div className="flex max-w-full h-screen">
         <UserSidebar />
         <MessageContainer />
       </div>

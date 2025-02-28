@@ -27,13 +27,13 @@ const ThemeDropdown = () => {
                 </svg>
             </div>
 
-            <ul tabIndex={0} className="dropdown-content bg-base-300 w-28 rounded-box z-10  p-2 shadow-2xl">
-                {["light", "synthwave", "luxury", "aqua"].map((theme) => (
-                    <li key={theme} >
+            <ul tabIndex={0} className="dropdown-content bg-base-300 w-28 rounded-box z-30  p-2 shadow-2xl">
+                {["light", "synthwave", "luxury", "black"].map((theme) => (
+                    <li key={theme} className="z-30">
                         <input
                             type="radio"
                             name="theme-dropdown"
-                            className="theme-controller  btn btn-sm btn-block btn-ghost justify-start "
+                            className="theme-controller  btn btn-sm btn-block btn-ghost justify-start z-30"
                             aria-label={theme}
                             value={theme}
                             onChange={handleThemeChange}

@@ -1,5 +1,4 @@
 import { Outlet } from "react-router-dom";
-import Navbar from "../components/Navbar";
 import { ToastContainer, Bounce } from 'react-toastify';
 
 
@@ -14,7 +13,6 @@ const MainLayout = () => (
                 pauseOnFocusLoss={false}
                 transition={Bounce}
             />
-            <Navbar />          {/* Appears on all pages */}
             <main >
                 <Outlet /> {/* Nested routes render here */}
             </main>

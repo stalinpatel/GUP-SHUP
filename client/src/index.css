@@ -74,3 +74,9 @@
 .scrollbar-hover:hover .scrollbar-hidden {
   opacity: 1;
 }
+.bottom-border {
+  @apply border-b-[1px] border-gray-700/50;
+}
+/* * {
+  outline: 1px solid red;
+} */
