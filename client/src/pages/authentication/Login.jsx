@@ -8,7 +8,6 @@ import { Link } from "react-router-dom"
 
 const Login = () => {
   const { register, handleSubmit, formState: { errors } } = useForm();
-
   const onSubmit = (data) => {
     console.log(data);
 
