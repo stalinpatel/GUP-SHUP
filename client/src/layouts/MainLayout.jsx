@@ -15,7 +15,7 @@ const MainLayout = () => (
                 transition={Bounce}
             />
             <Navbar />          {/* Appears on all pages */}
-            <main className="p-4">
+            <main >
                 <Outlet /> {/* Nested routes render here */}
             </main>
         </div>

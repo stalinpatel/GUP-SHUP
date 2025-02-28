@@ -1,4 +1,5 @@
 @import "tailwindcss";
+
 @plugin "daisyui" {
   themes: all;
 }
@@ -36,4 +37,40 @@
   --border: 1px;
   --depth: 1;
   --noise: 0;
+}
+
+/* Hide the default scrollbar */
+.scrollbar-hidden::-webkit-scrollbar {
+  display: none;
+}
+
+/* Custom floating scrollbar */
+.scrollbar-floating::-webkit-scrollbar {
+  width: 6px; /* Thin scrollbar */
+}
+
+.scrollbar-floating::-webkit-scrollbar-thumb {
+  background: rgba(0, 0, 0, 0.5); /* Black transparent scrollbar */
+  border-radius: 6px;
+}
+
+.scrollbar-floating::-webkit-scrollbar-track {
+  background: transparent; /* No background */
+}
+
+/* Smooth transition for showing/hiding scrollbar */
+.scrollbar-floating {
+  scrollbar-width: thin; /* For Firefox */
+  scrollbar-color: rgba(0, 0, 0, 0.5) transparent;
+  transition: opacity 0.3s ease-in-out;
+}
+
+/* Hide scrollbar when not scrolling */
+.scrollbar-hidden {
+  opacity: 0;
+}
+
+/* Show scrollbar on hover or scroll */
+.scrollbar-hover:hover .scrollbar-hidden {
+  opacity: 1;
 }
