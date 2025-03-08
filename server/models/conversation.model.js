@@ -7,7 +7,7 @@ const conversationSchema = new Schema(
         type: Schema.Types.ObjectId,
         ref: "User",
       },
-    ],  
+    ],
     messages: [
       {
         type: Schema.Types.ObjectId,
@@ -18,4 +18,4 @@ const conversationSchema = new Schema(
   { timestamps: true }
 );
 
-export const Conversation = model("Message", conversationSchema);
+export const Conversation = model("Conversation", conversationSchema);
