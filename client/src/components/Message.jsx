@@ -13,7 +13,7 @@ const Message = () => {
                 </div>
                 <div className="chat-bubble flex flex-col gap-x-1 pb-0">
                     <div className="content">
-                        I Love You Stalin
+                        Hey hii Stalin
                     </div>
                     <div className='flex py-1 justify-end items-end '>
                         <div className="text-xs opacity-50">12:45</div>
@@ -30,7 +30,7 @@ const Message = () => {
                 </div>
                 <div className="chat-bubble flex flex-col gap-x-1 pb-0">
                     <div className="content">
-                        I Love You Stalin
+                        How are you
                     </div>
                     <div className='flex py-1 justify-end items-end '>
                         <div className="text-xs opacity-50">12:45</div>

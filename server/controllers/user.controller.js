@@ -1,6 +1,7 @@
 import { User } from "../models/user.model.js";
 import { asyncHandler } from "../utilities/asyncHandler.utility.js";
 import { errorHandler } from "../utilities/errorHandler.utility.js";
+import { sendToken } from "../utilities/sendToken.utility.js";
 import bcrypt from "bcryptjs";
 
 export const register = asyncHandler(async (req, res, next) => {
@@ -27,14 +28,9 @@ export const register = asyncHandler(async (req, res, next) => {
     gender,
     avatar,
   });
-  await newUser.save();
 
-  res.status(200).json({
-    success: true,
-    responseData: {
-      newUser,
-    },
-  });
+  await newUser.save();
+  sendToken(newUser, 200, res, "User registered successfully");
 });
 
 export const login = asyncHandler(async (req, res, next) => {
@@ -56,10 +52,23 @@ export const login = asyncHandler(async (req, res, next) => {
     return next(new errorHandler("Invalid credentials", 401));
   }
 
+  sendToken(user, 200, res, "User logged in successfully");
+});
+
+export const getProfile = asyncHandler(async (req, res, next) => {
+  const profile = await User.findById(req?.userid);
   res.status(200).json({
     success: true,
-    responseData: {
-      user,
-    },
+    responseData: profile,
   });
+});
+
+export const logout = asyncHandler(async (req, res, next) => {
+  res
+    .status(200)
+    .cookie("token", "", {
+      expires: new Date(Date.now()),
+      httpOnly: true,
+    })
+    .json({ success: true, message: "Logout successfull" });
 });
