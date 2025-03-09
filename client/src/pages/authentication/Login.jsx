@@ -4,13 +4,14 @@ import { FaRegUser } from "react-icons/fa";
 import { FaKey } from "react-icons/fa";
 import { toast } from 'react-toastify';
 import { Link } from "react-router-dom"
-
+import { loginUserThunk } from '../../store/slice/user/user.thunk';
+import { useDispatch, useSelector } from "react-redux";
 
 const Login = () => {
+  const dispatch = useDispatch();
   const { register, handleSubmit, formState: { errors } } = useForm();
   const onSubmit = (data) => {
-    console.log(data);
-
+    dispatch(loginUserThunk(data))
   }
   const onError = () => {
     if (errors.username) {
