@@ -52,7 +52,7 @@ export const login = asyncHandler(async (req, res, next) => {
     return next(new errorHandler("Invalid credentials", 401));
   }
 
-  sendToken(user, 200, res, "User logged in successfully");
+  sendToken(user, 200, res, "Logged In successfully");
 });
 
 export const getProfile = asyncHandler(async (req, res, next) => {

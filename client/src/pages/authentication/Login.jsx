@@ -3,15 +3,22 @@ import { useForm, useFormContext } from "react-hook-form";
 import { FaRegUser } from "react-icons/fa";
 import { FaKey } from "react-icons/fa";
 import { toast } from 'react-toastify';
-import { Link } from "react-router-dom"
+import { Link, useNavigate } from "react-router-dom"
 import { loginUserThunk } from '../../store/slice/user/user.thunk';
 import { useDispatch, useSelector } from "react-redux";
 
 const Login = () => {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const { register, handleSubmit, formState: { errors } } = useForm();
-  const onSubmit = (data) => {
-    dispatch(loginUserThunk(data))
+  const { buttonLoading, userProfile } = useSelector((state) => state.user);
+
+  const onSubmit = async (data) => {
+    const response = await dispatch(loginUserThunk(data))
+    // console.log(response?.payload?.responseData)
+    if (loginUserThunk.fulfilled.match(response)) {
+      navigate("/home", { replace: true })
+    }
   }
   const onError = () => {
     if (errors.username) {
@@ -21,7 +28,6 @@ const Login = () => {
       toast(errors.password.message)
     }
   }
-
 
   return (
     <>
@@ -64,11 +70,14 @@ const Login = () => {
               title="Must be more than 8 characters, including number, lowercase letter, uppercase letter"
             />
           </label>
-          <input
+
+          <button
             type="submit"
-            value="Login"
-            className="btn btn-primary t md:mx-auto mx-0"
-          />
+            className="btn btn-primary md:mx-auto mx-0"
+            disabled={buttonLoading}
+          >
+            {buttonLoading ? <span className="loading loading-spinner"></span> : "Login"}
+          </button>
           <div>
             <span>
               Don't have an account ?

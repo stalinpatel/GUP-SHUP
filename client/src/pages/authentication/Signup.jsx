@@ -1,13 +1,15 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useForm, useFormContext } from "react-hook-form";
 import { FaRegUser } from "react-icons/fa";
 import { FaKey } from "react-icons/fa";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import { toast } from 'react-toastify';
-import { Link } from "react-router-dom"
-
-
+import { Link, useNavigate } from "react-router-dom"
+import { registerUserThunk } from '../../store/slice/user/user.thunk';
+import { useDispatch, useSelector } from "react-redux";
 const Signup = () => {
+    const dispatch = useDispatch();
+    const navigate = useNavigate()
     const { register, handleSubmit, formState: { errors } } = useForm({
         mode: "onTouched",
     });
@@ -15,14 +17,24 @@ const Signup = () => {
         password: false,
         confirmPassword: false,
     });
+    const [passwordMismatch, setPasswordMismatch] = useState(false);
+    const { buttonLoading } = useSelector((state) => state.user);
+
 
     const toggleVisibility = (field) => {
         setVisibility((prev) => ({ ...prev, [field]: !prev[field] }))
     }
 
-    const onSubmit = (data) => {
-        console.log(data);
-
+    const onSubmit = async (data) => {
+        if (data.password !== data.confirmPassword) {
+            setPasswordMismatch(true)
+            return toast.error("Password and Confirm Password doesn't match")
+        }
+        setPasswordMismatch(false)
+        const response = await dispatch(registerUserThunk(data))
+        if (registerUserThunk.fulfilled.match(response)) {
+            navigate("/home", { replace: true })
+        }
     }
     const onError = () => {
         Object.values(errors).forEach((error) => {
@@ -67,7 +79,7 @@ const Signup = () => {
                             title="Only letters, numbers or dash"
                         />
                     </label>
-                    <label className="password-input validator input  md:w-full ">
+                    <label className={`password-input validator input md:w-full ${passwordMismatch ? "border-red-500" : ""}`}>
                         <FaKey />
                         <input
                             type={visibility.password ? "text" : "password"}
@@ -91,7 +103,7 @@ const Signup = () => {
                             {visibility.password ? (<FaEye />) : (<FaEyeSlash />)}
                         </button>
                     </label>
-                    <label className="confirm-password-input validator input  md:w-full ">
+                    <label className={`confirm-password-input validator input md:w-full ${passwordMismatch ? "border-red-500" : ""}`}>
                         <FaKey />
                         <input
                             type={visibility.confirmPassword ? "text" : "password"}
@@ -115,13 +127,41 @@ const Signup = () => {
                             {visibility.confirmPassword ? (<FaEye />) : (<FaEyeSlash />)}
                         </button>
                     </label>
+                    <div className='flex gap-x-2 pb-3'>
+                        <label className='mr-2 flex items-center'>
+                            <input
+                                type="radio"
+                                {...register("gender", {
+                                    required: "Please select your gender"
+                                })}
+                                value="male"
+                                name="gender"
+                                className="radio radio-md mr-2"
+                            />
+                            Male
+                        </label>
+                        <label className='flex items-center'>
+                            <input
+                                type="radio"
+                                {...register("gender", {
+                                    required: "Please select your gender"
+                                })}
+                                name="gender"
+                                value="female"
+                                className="radio radio-md mr-2 "
+                            />
+                            Female
+                        </label>
+                    </div>
 
-
-                    <input
+                    <button
                         type="submit"
-                        value="Sign Up"
-                        className="btn btn-primary t md:mx-auto mx-0"
-                    />
+                        className="btn btn-primary md:mx-auto mx-0"
+                        disabled={buttonLoading}
+                    >
+                        {buttonLoading ? <span className="loading loading-spinner"></span> : "Sign Up"}
+
+                    </button>
                     <div className='flex flex-col md:flex-row justify-between '>
                         <div >
                             <span>

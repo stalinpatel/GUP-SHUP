@@ -2,9 +2,21 @@ import React from 'react';
 import { IoSearch } from "react-icons/io5";
 import { IoCreateOutline } from "react-icons/io5";
 import Navbar from "../../components/Navbar";
+import { logoutUserThunk } from '../../store/slice/user/user.thunk';
+import { useDispatch } from 'react-redux';
+import { replace, useNavigate } from 'react-router-dom';
 
 
 const UserSidebar = () => {
+    const dispatch = useDispatch();
+    const navigate = useNavigate();
+    const handleLogout = async () => {
+        const response = await dispatch(logoutUserThunk())
+        console.log('response :', response.payload);
+        if (response.payload.success) {
+            navigate("/", { replace: true })
+        }
+    }
     return (
         <>
             <div className='min-w-[20rem]  h-full flex flex-col border-r-[1px] border-gray-700/50 z-0'>
@@ -61,7 +73,7 @@ const UserSidebar = () => {
                         </div>
                     </div>
                     <div className='name font-bold text-lg grow'>Stalin Patel</div>
-                    <button className="btn btn-sm btn-ghost px-4 font-bold  flex items-center bg-accent text-accent-content rounded-xl">Logout</button>
+                    <button onClick={handleLogout} className="btn btn-sm btn-ghost px-4 font-bold  flex items-center bg-accent text-accent-content rounded-xl">Logout</button>
                 </div>
             </div>
         </>
