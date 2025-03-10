@@ -1,7 +1,5 @@
 import { Outlet } from "react-router-dom";
 import { ToastContainer, Bounce } from 'react-toastify';
-
-
 const MainLayout = () => (
     <>
         <div >

@@ -16,6 +16,7 @@ const Home = () => {
 
   // ⬇️ Prevent rendering if not authenticated (optional optimization)
   if (!isAuthenticated) return null;
+
   return (
     <>
       <div className="flex max-w-full h-screen">

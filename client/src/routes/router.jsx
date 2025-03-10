@@ -5,6 +5,7 @@ import Home from '../pages/home/Home.jsx';
 import Login from '../pages/authentication/Login.jsx';
 import Signup from '../pages/authentication/Signup.jsx';
 import ResetPassword from '../pages/authentication/ResetPassword.jsx';
+import ProtectedRoutes from '../components/protectedRoutes.jsx';
 
 
 const router = createBrowserRouter([
@@ -12,8 +13,13 @@ const router = createBrowserRouter([
         path: '/',
         element: <MainLayout />,
         children: [
-            { index: true, element: <Login /> },
-            { path: "/home", element: <Home /> },
+            {
+                index: true,
+                element:
+                    <ProtectedRoutes>
+                        <Home />
+                    </ProtectedRoutes>
+            },
             { path: "/login", element: <Login /> },
             { path: "/signup", element: <Signup /> },
             { path: "/resetpassword", element: <ResetPassword /> }

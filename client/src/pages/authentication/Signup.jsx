@@ -7,6 +7,7 @@ import { toast } from 'react-toastify';
 import { Link, useNavigate } from "react-router-dom"
 import { registerUserThunk } from '../../store/slice/user/user.thunk';
 import { useDispatch, useSelector } from "react-redux";
+
 const Signup = () => {
     const dispatch = useDispatch();
     const navigate = useNavigate()
@@ -18,7 +19,12 @@ const Signup = () => {
         confirmPassword: false,
     });
     const [passwordMismatch, setPasswordMismatch] = useState(false);
-    const { buttonLoading } = useSelector((state) => state.user);
+    const { buttonLoading, isAuthenticated } = useSelector((state) => state.user);
+    useEffect(() => {
+        if (isAuthenticated) {
+            navigate("/")
+        }
+    }, [isAuthenticated, navigate])
 
 
     const toggleVisibility = (field) => {
@@ -33,7 +39,7 @@ const Signup = () => {
         setPasswordMismatch(false)
         const response = await dispatch(registerUserThunk(data))
         if (registerUserThunk.fulfilled.match(response)) {
-            navigate("/home", { replace: true })
+            navigate("/", { replace: true })
         }
     }
     const onError = () => {

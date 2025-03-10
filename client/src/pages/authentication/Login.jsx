@@ -6,18 +6,26 @@ import { toast } from 'react-toastify';
 import { Link, useNavigate } from "react-router-dom"
 import { loginUserThunk } from '../../store/slice/user/user.thunk';
 import { useDispatch, useSelector } from "react-redux";
+import { useEffect } from 'react';
 
 const Login = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const { isAuthenticated } = useSelector(state => state.user)
   const { register, handleSubmit, formState: { errors } } = useForm();
   const { buttonLoading, userProfile } = useSelector((state) => state.user);
+
+  useEffect(() => {
+    if (isAuthenticated) {
+      navigate("/")
+    }
+  }, [isAuthenticated, navigate])
 
   const onSubmit = async (data) => {
     const response = await dispatch(loginUserThunk(data))
     // console.log(response?.payload?.responseData)
     if (loginUserThunk.fulfilled.match(response)) {
-      navigate("/home", { replace: true })
+      navigate("/")
     }
   }
   const onError = () => {

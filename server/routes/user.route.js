@@ -6,7 +6,7 @@ import {
 } from "../controllers/user.controller.js";
 import express from "express";
 import { isAuthenticated } from "../middlewares/auth.middleware.js";
-import { getOtherUsers } from "../controllers/message.controller.js";
+import { getOtherUsers } from "../controllers/user.controller.js";
 const router = express.Router();
 
 router.post("/register", register);

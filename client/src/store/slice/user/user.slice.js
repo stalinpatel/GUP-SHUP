@@ -3,29 +3,46 @@ import {
   loginUserThunk,
   logoutUserThunk,
   registerUserThunk,
+  getUserProfileThunk,
+  getOtherUsersThunk,
 } from "./user.thunk";
 import { toast } from "react-toastify";
 
 const initialState = {
   userProfile: null,
   isAuthenticated: false,
-  loading: false,
+  loading: true,
   buttonLoading: false,
+  otherUsers: [],
+  selectedUser: null,
 };
 
-const handlePending = (state) => {
+const handlePending = (state, action, customHandler = null) => {
   state.buttonLoading = true;
+  if (customHandler) {
+    customHandler(state, action);
+  }
 };
 
-const handleRejected = (state, action) => {
+const handleRejected = (state, action, customHandler = null) => {
   state.buttonLoading = false;
   toast.error(action.payload);
+  if (customHandler) {
+    customHandler(state, action);
+  }
 };
 
-const handleFulfilled = (state, action, message, customHandler = null) => {
+const handleFulfilled = (
+  state,
+  action,
+  message = null,
+  customHandler = null
+) => {
   state.buttonLoading = false;
   state.userProfile = action.payload?.responseData?.user;
-  toast.success(message);
+  if (message) {
+    toast.success(message);
+  }
   if (customHandler) {
     customHandler(state, action);
   }
@@ -34,7 +51,11 @@ const handleFulfilled = (state, action, message, customHandler = null) => {
 export const userSlice = createSlice({
   name: "user",
   initialState,
-  reducers: {},
+  reducers: {
+    setSelectedUser: (state, action) => {
+      state.selectedUser = action.payload;
+    },
+  },
   extraReducers: (builder) => {
     builder
       // 🔹 Login
@@ -68,11 +89,51 @@ export const userSlice = createSlice({
           }
         )
       )
-      .addCase(logoutUserThunk.rejected, handleRejected);
+      .addCase(logoutUserThunk.rejected, handleRejected)
+
+      // 🔹 Get Profile
+
+      .addCase(getUserProfileThunk.pending, (state, action) =>
+        handlePending(state, action, (state, action) => {
+          state.isAuthenticated = false;
+          state.loading = true;
+        })
+      )
+      .addCase(getUserProfileThunk.fulfilled, (state, action) =>
+        handleFulfilled(state, action, null, (state, action) => {
+          state.isAuthenticated = true;
+          state.loading = false;
+          // console.log("userProfile :", action.payload?.responseData);
+          state.userProfile = action.payload?.responseData;
+        })
+      )
+      .addCase(getUserProfileThunk.rejected, (state, action) =>
+        handleRejected(state, action, (state, action) => {
+          state.isAuthenticated = false;
+          state.loading = false;
+        })
+      )
+
+      // 🔹 Get other users
+      .addCase(getOtherUsersThunk.pending, (state, action) =>
+        handlePending(state, action, (state, action) => {
+          state.loading = true;
+        })
+      )
+      .addCase(getOtherUsersThunk.fulfilled, (state, action) =>
+        handleFulfilled(state, action, null, (state, action) => {
+          state.loading = false;
+          state.otherUsers = action.payload?.responseData;
+        })
+      )
+      .addCase(getOtherUsersThunk.rejected, (state, action) =>
+        handleRejected(state, action, (state, action) => {
+          state.loading = false;
+        })
+      );
   },
 });
 
-export const { userProfile, isAuthenticated, buttonLoading, loading } =
-  userSlice.actions;
+export const { setSelectedUser } = userSlice.actions;
 
 export default userSlice.reducer;
