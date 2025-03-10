@@ -43,7 +43,6 @@ export const sendMessage = asyncHandler(async (req, res, next) => {
   });
 });
 
-
 export const getMessages = asyncHandler(async (req, res, next) => {
   const myId = req.userid;
   const participantId = req.params.participantId;
@@ -52,11 +51,9 @@ export const getMessages = asyncHandler(async (req, res, next) => {
     return next(new errorHandler("All fields are required", 400));
   }
 
-  let conversation = await Conversation.find({
+  let conversation = await Conversation.findOne({
     participants: { $all: [myId, participantId] },
-  }).populate("messages", "message");
-
-  console.log("conversation :", conversation);
+  })?.populate("messages");
 
   res.status(200).json({
     success: true,

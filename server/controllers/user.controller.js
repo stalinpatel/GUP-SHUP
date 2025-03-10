@@ -20,7 +20,8 @@ export const register = asyncHandler(async (req, res, next) => {
   const hashedPassword = await bcrypt.hash(password, 10);
 
   const avatarType = gender === "male" ? "boy" : "girl";
-  const avatar = `https://avatar.iran.liara.run/public/${avatarType}?username=${username}`;
+  // const avatar = `https://avatar.iran.liara.run/public/${avatarType}?username=${username}`;
+  const avatar = `https://eu.ui-avatars.com/api/?name=${fullName}&size=250&background=random`;
   const newUser = new User({
     fullName,
     username,

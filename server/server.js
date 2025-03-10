@@ -12,7 +12,7 @@ app.use(express.json()); // Middleware to parse JSON
 app.use(cookieParser());
 app.use(
   cors({
-    origin: ["http://localhost:5173"],
+    origin: ["http://localhost:5173", "http://localhost:5174"],
     credentials: true,
   })
 );
@@ -23,10 +23,6 @@ import messageRouter from "./routes/message.route.js";
 
 app.use("/api/v1/user", userRouter);
 app.use("/api/v1/message", messageRouter);
-
-app.get("/", (req, res) => {
-  res.send("Hello World!");
-});
 
 //MIDDLEWARES
 import { errorMiddleware } from "./middlewares/error.middleware.js";

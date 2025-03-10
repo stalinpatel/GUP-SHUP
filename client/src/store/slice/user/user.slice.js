@@ -39,7 +39,7 @@ const handleFulfilled = (
   customHandler = null
 ) => {
   state.buttonLoading = false;
-  state.userProfile = action.payload?.responseData?.user;
+
   if (message) {
     toast.success(message);
   }
@@ -63,6 +63,7 @@ export const userSlice = createSlice({
       .addCase(loginUserThunk.fulfilled, (state, action) =>
         handleFulfilled(state, action, "Logged In Successfully", (state) => {
           state.isAuthenticated = true;
+          state.userProfile = action.payload?.responseData?.user;
         })
       )
       .addCase(loginUserThunk.rejected, handleRejected)
@@ -72,6 +73,7 @@ export const userSlice = createSlice({
       .addCase(registerUserThunk.fulfilled, (state, action) =>
         handleFulfilled(state, action, "Registered Successfully", (state) => {
           state.isAuthenticated = true;
+          state.userProfile = action.payload?.responseData?.user;
         })
       )
       .addCase(registerUserThunk.rejected, handleRejected)

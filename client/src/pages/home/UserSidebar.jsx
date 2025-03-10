@@ -3,17 +3,15 @@ import { IoSearch } from "react-icons/io5";
 import { IoCreateOutline } from "react-icons/io5";
 import Navbar from "../../components/Navbar";
 import { logoutUserThunk, getOtherUsersThunk } from '../../store/slice/user/user.thunk';
-import { setSelectedUser } from '../../store/slice/user/user.slice';
 import { useDispatch, useSelector } from 'react-redux';
-import { replace, useNavigate } from 'react-router-dom';
-import User from './User';
+import { useNavigate } from 'react-router-dom';
+import User from "./components/User"
 
 
 const UserSidebar = () => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
-    const { otherUsers } = useSelector(state => state.user)
-
+    const { otherUsers, userProfile } = useSelector(state => state.user)
     const handleLogout = async () => {
         const response = await dispatch(logoutUserThunk())
         if (response.payload.success) {
@@ -21,11 +19,7 @@ const UserSidebar = () => {
         }
     }
 
-    const handleUserClick = (e) => {
-        const selectedIndex = e.target.closest("li").getAttribute("index");
-        const selectedUser = otherUsers[selectedIndex]
-        dispatch(setSelectedUser(selectedUser))
-    }
+
 
     useEffect(() => {
         dispatch(getOtherUsersThunk())
@@ -49,15 +43,11 @@ const UserSidebar = () => {
                 <div className='user-conatainer  grow px-2 overflow-y-scroll '>
                     <ul className="list bg-base-100  shadow-md h-full ">
                         {
-                            otherUsers?.map((userDetails, index) => {
-
-
+                            otherUsers?.map((userDetails) => {
                                 return (
                                     <User
-                                        index={index}
                                         key={userDetails?._id}
                                         userDetails={userDetails}
-                                        onUserClick={handleUserClick}
                                     />
                                 )
                             })
@@ -67,11 +57,16 @@ const UserSidebar = () => {
                 <div className='footer bg-base-300 px-3 h-20 flex items-center'>
                     <div className="profile avatar">
                         <div className="ring-primary ring-offset-base-100 w-8 rounded-full ring ring-offset-2">
-                            <img src="https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.webp" />
+                            <img src={userProfile?.avatar} />
                         </div>
                     </div>
-                    <div className='name font-bold text-lg grow'>Stalin Patel</div>
-                    <button onClick={handleLogout} className="btn btn-sm btn-ghost px-4 font-bold  flex items-center bg-accent text-accent-content rounded-xl">Logout</button>
+                    <div className='name font-bold text-lg grow'>{userProfile?.fullName}</div>
+                    <button
+                        onClick={handleLogout}
+                        className="btn btn-sm btn-ghost px-4 font-bold  flex items-center bg-accent text-accent-content rounded-xl"
+                    >
+                        Logout
+                    </button>
                 </div>
             </div >
         </>
