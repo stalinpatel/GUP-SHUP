@@ -1,9 +1,9 @@
 import React, { useEffect } from 'react';
 import IntroPage from './IntroPage';
-import { IoSend } from "react-icons/io5";
 import { useDispatch, useSelector } from 'react-redux';
-import { loadConversation } from '../../store/slice/message/message.thunk';
+import { loadConversationThunk } from '../../store/slice/message/message.thunk';
 import ChatsContainer from './components/ChatsContainer';
+import MessageInputBox from './components/MessageInputBox';
 
 
 const MessageContainer = () => {
@@ -11,7 +11,7 @@ const MessageContainer = () => {
   const dispatch = useDispatch()
   useEffect(() => {
     const getMessages = async () => {
-      await dispatch(loadConversation({ participantId: selectedUser?._id }))
+      await dispatch(loadConversationThunk({ participantId: selectedUser?._id }))
     }
     if (selectedUser?._id) {
       getMessages();
@@ -35,15 +35,7 @@ const MessageContainer = () => {
           <ChatsContainer />
         </div>
         <div className="message-input-box bottom-border h-16 flex items-center relative">
-          <input
-            type="text"
-            required
-            className="outline-none border-none px-4 w-full h-full  bg-base-300"
-            placeholder="Type a message..."
-          />
-          <button className="btn btn-sm btn-ghost absolute right-6 scale-150">
-            <IoSend />
-          </button>
+          <MessageInputBox />
         </div>
       </div>
     )

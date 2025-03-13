@@ -15,12 +15,13 @@ const ChatsContainer = () => {
                     lastDate = messageDate;
                     return (
                         <React.Fragment key={messageDetails._id}>
-                            <Message
-                                messageDetails={messageDetails}
-                            />
                             {
                                 showDateSeparator && <ChatDateSeparator createdAt={messageDetails.createdAt} />
                             }
+                            <Message
+                                messageDetails={messageDetails}
+                            />
+
                         </React.Fragment>
                     )
                 })

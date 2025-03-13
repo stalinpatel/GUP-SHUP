@@ -1,7 +1,7 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import { axiosInstance } from "../../../utilities/axios.instance";
 
-export const loadConversation = createAsyncThunk(
+export const loadConversationThunk = createAsyncThunk(
   "message/getMessages",
   async ({ participantId }, { rejectWithValue }) => {
     try {
@@ -16,16 +16,18 @@ export const loadConversation = createAsyncThunk(
     }
   }
 );
-// export const sendMessageThunk = createAsyncThunk(
-//   "message/send",
-//   async ({ receiverId, message }, { rejectWithValue }) => {
-//     console.log("receiverId :", receiverId);
-//     try {
-//       const response = await axiosInstance.post(`/send/:${receiverId}`);
-//       return response.data;
-//     } catch (error) {
-//       const errorOutput = error?.response?.data.errMessage;
-//       return rejectWithValue(errorOutput);
-//     }
-//   }
-// );
+export const sendMessageThunk = createAsyncThunk(
+  "message/send",
+  async ({ receiverId, message }, { rejectWithValue }) => {
+    console.log("receiverId :", receiverId);
+    try {
+      const response = await axiosInstance.post(`/message/send/${receiverId}`, {
+        message,
+      });
+      return response.data;
+    } catch (error) {
+      const errorOutput = error?.response?.data.errMessage;
+      return rejectWithValue(errorOutput);
+    }
+  }
+);

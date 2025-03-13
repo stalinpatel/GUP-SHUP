@@ -7,6 +7,7 @@ import {
   getOtherUsersThunk,
 } from "./user.thunk";
 import { toast } from "react-toastify";
+import { act } from "react";
 
 const initialState = {
   userProfile: null,
@@ -14,7 +15,7 @@ const initialState = {
   loading: true,
   buttonLoading: false,
   otherUsers: [],
-  selectedUser: null,
+  selectedUser: JSON.parse(localStorage.getItem("selectedUser")) || null,
 };
 
 const handlePending = (state, action, customHandler = null) => {
@@ -39,6 +40,7 @@ const handleFulfilled = (
   customHandler = null
 ) => {
   state.buttonLoading = false;
+  state.loading = false;
 
   if (message) {
     toast.success(message);
@@ -54,6 +56,7 @@ export const userSlice = createSlice({
   reducers: {
     setSelectedUser: (state, action) => {
       state.selectedUser = action.payload;
+      localStorage.setItem("selectedUser", JSON.stringify(action.payload));
     },
   },
   extraReducers: (builder) => {
@@ -86,8 +89,12 @@ export const userSlice = createSlice({
           action,
           "Logged Out Successfully",
           (state, action) => {
-            state.userProfile = null;
+            state.buttonLoading = false;
             state.isAuthenticated = false;
+            state.userProfile = null;
+            state.otherUsers = null;
+            state.selectedUser = null;
+            localStorage.clear();
           }
         )
       )
