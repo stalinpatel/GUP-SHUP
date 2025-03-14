@@ -7,7 +7,6 @@ import {
   getOtherUsersThunk,
 } from "./user.thunk";
 import { toast } from "react-toastify";
-import { act } from "react";
 
 const initialState = {
   userProfile: null,

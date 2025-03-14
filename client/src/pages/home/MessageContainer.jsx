@@ -31,9 +31,9 @@ const MessageContainer = () => {
             {selectedUser?.fullName}
           </div>
         </div>
-        <div className="chat-container grow px-4 h-full overflow-y-auto">
+        <ul className="chat-container grow px-4 h-full overflow-y-auto">
           <ChatsContainer />
-        </div>
+        </ul>
         <div className="message-input-box bottom-border h-16 flex items-center relative">
           <MessageInputBox />
         </div>

@@ -5,7 +5,7 @@ import { sendMessageThunk } from "./message.thunk";
 const initialState = {
   buttonLoading: false,
   loading: false,
-  messages: null,
+  messages: [],
 };
 
 export const messageSlice = createSlice({
@@ -14,6 +14,7 @@ export const messageSlice = createSlice({
   reducers: {
     pushMessage: (state, action) => {
       state.messages = [...state.messages, action.payload];
+      // console.log("new messge thunk", action.payload);
     },
   },
   extraReducers: (builder) => {

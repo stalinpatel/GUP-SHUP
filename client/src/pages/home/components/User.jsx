@@ -5,16 +5,20 @@ import { setSelectedUser } from '../../../store/slice/user/user.slice';
 const User = ({ userDetails, index }) => {
     const dispatch = useDispatch();
     const { selectedUser } = useSelector(state => state.user)
+    const { onlineUsers } = useSelector(state => state.socket)
+    const isUserOnline = onlineUsers.includes(userDetails._id)
+
     const handleUserClick = () => {
         dispatch(setSelectedUser(userDetails))
     }
+
     return (
         < li
             index={index}
             onClick={handleUserClick}
             className={`list-row bottom-border  rounded-md hover:bg-base-300 cursor-default ${selectedUser?._id === userDetails._id ? "bg-base-300/50" : ""}`}
         >
-            <div className="avatar avatar-online">
+            <div className={`avatar ${isUserOnline ? "avatar-online" : ""}`}>
                 <div className="w-10 rounded-full">
                     <img src={userDetails?.avatar} />
                 </div>

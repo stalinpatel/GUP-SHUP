@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
 import { useSelector } from 'react-redux';
 
 const Message = ({ messageDetails }) => {
@@ -9,19 +9,23 @@ const Message = ({ messageDetails }) => {
         minute: "2-digit",
         hour12: true,
     });
+    const messageRef = useRef();
+
+    useEffect(() => {
+        if (messageRef.current) {
+            messageRef.current.scrollIntoView({ behavior: 'smooth' });
+        }
+    }, [])
     return (
-        <div>
-            <div className={`chat ${isSender ? "chat-end" : "chat-start"}`}>
-                <div className="chat-bubble flex flex-col gap-x-1 pb-0">
-                    <div className="content">
-                        {messageDetails.message}
-                    </div>
-                    <div className='flex py-1 justify-end items-end '>
-                        <div className="text-xs opacity-50">{sentAt}</div>
-                    </div>
+        <div ref={messageRef} className={`chat ${isSender ? "chat-end" : "chat-start"}`}>
+            <div className="chat-bubble flex flex-col gap-x-1 pb-0">
+                <div className="content">
+                    {messageDetails.message}
+                </div>
+                <div className='flex py-1 justify-end items-end '>
+                    <div className="text-xs opacity-50">{sentAt}</div>
                 </div>
             </div>
-
         </div>
     );
 };

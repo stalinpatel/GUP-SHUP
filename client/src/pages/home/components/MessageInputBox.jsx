@@ -4,10 +4,12 @@ import { useDispatch } from 'react-redux';
 import { sendMessageThunk } from '../../../store/slice/message/message.thunk';
 import { pushMessage } from '../../../store/slice/message/message.slice';
 import { useSelector } from 'react-redux';
+import { sendMessageViaSocket } from '../../../socket/socket';
 
 const MessageInputBox = () => {
     const dispatch = useDispatch();
-    const { selectedUser } = useSelector(state => state.user)
+    const { selectedUser, userProfile } = useSelector(state => state.user)
+
     const [inputMessage, setInputMessage] = useState("")
 
 
@@ -23,12 +25,20 @@ const MessageInputBox = () => {
             receiverId: selectedUser?._id,
             message: msg
         }));
-        dispatch(pushMessage(msg))
 
-        if (resp.payload.success) {
+        if (resp.payload?.success) {
+            dispatch(pushMessage({
+                message: msg,
+                createdAt: new Date().toISOString(),
+                receiverId: selectedUser?._id,
+                senderId: userProfile._id
+            }))
+            sendMessageViaSocket({
+                receiverId: selectedUser?._id,
+                message: msg
+            })
             setInputMessage(""); // Clear the input field
         }
-
     }
 
     return (

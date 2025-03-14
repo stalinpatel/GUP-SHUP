@@ -4,6 +4,7 @@ import { asyncHandler } from "../utilities/asyncHandler.utility.js";
 import { errorHandler } from "../utilities/errorHandler.utility.js";
 import { User } from "../models/user.model.js";
 import { populate } from "dotenv";
+import { io, getSocketId } from "../socket/socket.js";
 
 export const sendMessage = asyncHandler(async (req, res, next) => {
   const senderId = req.userid;
@@ -33,6 +34,10 @@ export const sendMessage = asyncHandler(async (req, res, next) => {
     conversation.messages.push(newMessage._id);
     await conversation.save();
   }
+  io.to(getSocketId(receiverId)).emit("receiveMessage", {
+    message: newMessage,
+    createdAt: new Date().toISOString(),
+  });
 
   res.status(200).json({
     success: true,

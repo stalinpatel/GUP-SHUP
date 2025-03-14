@@ -11,11 +11,41 @@ const io = new Server(server, {
   },
 });
 
+const userSocketMap = new Map(); // userId -> socket.id
+const socketUserMap = new Map(); // socket.id -> userId
+
 io.on("connection", (socket) => {
-  console.log("A user connected with id :", socket.id);
-  io.on("disconnect", () => {
+  const userId = socket.handshake.query.userId;
+  if (!userId) return;
+
+  userSocketMap.set(userId, socket.id);
+  socketUserMap.set(socket.id, userId);
+  console.log(`User ${userId} registered with socket ID: ${socket.id}`);
+  io.emit("onlineUsers", Array.from(userSocketMap.keys()));
+
+  socket.on("sendMessage", ({ receiverId, message }) => {
+    const receiverSocketId = userSocketMap.get(receiverId);
+    if (receiverId) {
+      console.log(
+        `Message sent to user ${receiverId} with socket ID ${receiverSocketId}`
+      );
+    } else {
+      console.log(`User ${receiverId} is not connected`);
+    }
+  });
+
+  socket.on("disconnect", () => {
     console.log("user disconnected");
+    const userId = socketUserMap.get(socket.id);
+    if (userId) {
+      userSocketMap.delete(userId);
+      socketUserMap.delete(socket.id);
+      console.log("user deleted:", userId);
+      io.emit("onlineUsers", Array.from(userSocketMap.keys()));
+    }
   });
 });
-
+export const getSocketId = (receiverId) => {
+  return userSocketMap.get(receiverId);
+};
 export { app, io, server };

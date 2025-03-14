@@ -19,7 +19,7 @@ export const loadConversationThunk = createAsyncThunk(
 export const sendMessageThunk = createAsyncThunk(
   "message/send",
   async ({ receiverId, message }, { rejectWithValue }) => {
-    console.log("receiverId :", receiverId);
+    // console.log("receiverId :", receiverId);
     try {
       const response = await axiosInstance.post(`/message/send/${receiverId}`, {
         message,
